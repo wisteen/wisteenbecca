@@ -27,6 +27,11 @@ SECRET_KEY = 'django-insecure-v6#2399_3(1vs_tcdg!1*f)y19tq7e&_=050aqdz$p^(b%o)^!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://wisteenbecca.onrender.com',
+    # You can add other domains if needed
+]
+
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "wisteenbecca.onrender.com","*"]
 
 
