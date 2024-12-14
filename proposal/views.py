@@ -4,6 +4,8 @@ from django.http import JsonResponse, HttpResponse
 
 from .functions import *
 import json
+
+
 # Create your views here.
 
 def home(request):
@@ -22,4 +24,23 @@ def WhatsAppWebhook(request):
 			return HttpResponse('error', status=403)
 	if request.method == 'POST':
 		data = json.loads(request.body)
-		return HttpResponse('success', status=200)
+		if 'object' in data and 'entry' in data:
+			try:
+				for entry in data['entry']:
+					phoneNumber = entry['changes'][0]['value']['metadata']['display_phone_number']
+					phoneId = entry['changes'][0]['value']['metadata']['phone_number_id']
+					profileName = entry['changes'][0]['value']['contacts'][0]['profile']['name']
+					whatsAppId = entry['changes'][0]['value']['contacts'][0]['wa_id']
+					fromId = entry['changes'][0]['value']['messages'][0]['from']
+					messageId = entry['changes'][0]['value']['messages'][0]['id']
+					timestamp = entry['changes'][0]['value']['messages'][0]['timestamp']
+					text = entry['changes'][0]['value']['messages'][0]['body']
+
+					phoneNumber = "2349125442676"
+					message = 'RE: {} was recieved from wisteenbecca'.format(text)
+
+					send_whatsapp_message(phoneNumber, message)
+
+			except:
+				pass
+	return HttpResponse('success', status=200)
