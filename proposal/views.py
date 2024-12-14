@@ -5,6 +5,8 @@ from django.http import JsonResponse, HttpResponse
 from .functions import *
 import json
 
+import logging
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -24,6 +26,7 @@ def WhatsAppWebhook(request):
 			return HttpResponse('error', status=403)
 	if request.method == 'POST':
 		data = json.loads(request.body)
+		logger.info(f"Incoming POST Data: {data}")
 		if 'object' in data and 'entry' in data:
 			try:
 				for entry in data['entry']:
@@ -38,9 +41,14 @@ def WhatsAppWebhook(request):
 
 					phoneNumber = "2349125442676"
 					message = 'RE: {} was recieved from wisteenbecca'.format(text)
+					logger.info(f"Processing message from {profileName}: {text}")
 
 					sendWhatsappMessage(phoneNumber, message)
 
-			except:
-				pass
+			except json.JSONDecodeError as e:
+            	logger.error(f"JSON decoding error: {e}")
+            	return HttpResponse('Invalid JSON', status=400)
+        	except Exception as e:
+            	logger.error(f"Error processing webhook: {e}")
+            	return HttpResponse('Error processing request', status=500)
 	return HttpResponse('success', status=200)
