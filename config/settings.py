@@ -32,6 +32,10 @@ CSRF_TRUSTED_ORIGINS = [
     # You can add other domains if needed
 ]
 
+
+ASGI_APPLICATION = 'config.asgi.application'
+
+
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "wisteenbecca.onrender.com","*"]
 
 
@@ -46,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # create other apps
     'proposal',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -152,3 +157,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
+WHATSAPP_URL="https://graph.facebook.com/v21.0/484038361468119/messages"
+WHATSAPP_TOKEN="Bearer EAARS1iKIw8MBO1Bswr3TZBGZBFdCvnqWvTaHVeAWXJjMv3dGklmbZCqfXzUflBTiN3F3OTnzV9ZBhcJPVnP2cpW1B35RxvI4t7OELcNWp8DoR7ASqjpbG6eJaP1MZBg0K9O97BtZBAroT4dylp5s2UB8KSVEl3sQaR8XiImnNDZC8SnNRcXjWns9HdeBr4zywcZA5mg1Gn47SZBaoi91wUodOKlckMxjnRhK2QYT8OHhyCZAht"
