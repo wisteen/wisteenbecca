@@ -2,7 +2,7 @@ from django.urls import path, include
 from . import views
 
 urlpatterns=[
-	path('', wiews.home, name="home"),
+	path('', views.home, name="home"),
 	path('06f840f9-af3f-457f-a3a2-3705799b8fae', views.WhatsAppWebhook, name="whatsapp-webhook")
 ]
 
