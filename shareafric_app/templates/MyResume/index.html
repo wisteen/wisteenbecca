@@ -66,14 +66,26 @@
       <h1>Rebecca Douglas Kwamboka</h1>
       <p>I'm a <span class="typed" data-typed-items="Designer, Auditor, Freelancer, Photographer, ISO Specialist, Consultant"></span></p>
       <div class="social-links">
-        <a href="{{ pages.twitter_url }}" class="twitter"><i class="bx bxl-twitter"></i></a>
-        <a href="{{ pages.facebook_url }}" class="facebook"><i class="bx bxl-facebook"></i></a>
-        <a href="{{ pages.instagram_url }}" class="instagram"><i class="bx bxl-instagram"></i></a>
-        <a href="{{ pages.git_url }}" class="github"><i class="bx bxl-github"></i></a>
-        <a href="{{ pages.youtube_url }}" class="github"><i class="bx bxl-youtube"></i></a>
-        <a href="{{ pages.linkedin_url }}" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-
+          {% if pages.twitter_url %}
+              <a href="{{ pages.twitter_url }}" class="twitter"><i class="bx bxl-twitter"></i></a>
+          {% endif %}
+          {% if pages.facebook_url %}
+              <a href="{{ pages.facebook_url }}" class="facebook"><i class="bx bxl-facebook"></i></a>
+          {% endif %}
+          {% if pages.instagram_url %}
+              <a href="{{ pages.instagram_url }}" class="instagram"><i class="bx bxl-instagram"></i></a>
+          {% endif %}
+          {% if pages.git_url %}
+              <a href="{{ pages.git_url }}" class="github"><i class="bx bxl-github"></i></a>
+          {% endif %}
+          {% if pages.youtube_url %}
+              <a href="{{ pages.youtube_url }}" class="github"><i class="bx bxl-youtube"></i></a>
+          {% endif %}
+          {% if pages.linkedin_url %}
+              <a href="{{ pages.linkedin_url }}" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+          {% endif %}
       </div>
+
     </div>
   </section><!-- End Hero -->
 

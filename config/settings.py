@@ -180,7 +180,7 @@ JAZZMIN_SETTINGS = {
     "site_brand": "Rebecca Douglas",
 
     # Logo for the site
-    "site_logo": "assets/img/hero-bg.jpg",
+    "site_logo": "assets/img/logo.png",
 
     # Welcome text on the login screen
     "welcome_sign": "Welcome to Rebecca Douglas' Portfolio",

@@ -1,92 +1,61 @@
+
+
+
 from django.contrib import admin
-from django.contrib.admin import AdminSite
-from .models import *
-from django import forms
+from .models import (
+    Feedback, Webdata, Client, Service, SkillRight, SkillLeft, 
+    Summary, Education
+)
 
-# class IndividualRegistrationAdmin(admin.ModelAdmin):
-#     list_display = ('name', 'email', 'phone','country_of_origin')
-#     list_filter = ('name', 'email','phone', 'country_of_origin', 'state_region' )
-#     search_fields = ('name', 'email', 'phone', 'country_of_origin', 'state_region', 'sector')
-
-# admin.site.register(ContactUs)
-# admin.site.register(Webdata)
-# admin.site.register(Service)
-# admin.site.register(SkillRight)
-# admin.site.register(SkillLeft)
-# admin.site.register(Client)
-
-# admin.site.register(Summary)
-
-# admin.site.register(Facts)
-
-# admin.site.register(Education)
-# admin.site.register(Experience)
-# admin.site.register(Portfolio)
-
-# Custom admin class for Feedback model
+# Feedback Admin
+@admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'message']
+    list_display = ('name', 'email', 'message')
+    search_fields = ('name', 'email')
 
-# Custom admin class for Webdata model
+# Webdata Admin
+@admin.register(Webdata)
 class WebdataAdmin(admin.ModelAdmin):
-    list_display = ['id','logo', 'phone', 'email', 'location']
-
-# Custom admin class for Client model
+    list_display = ('phone', 'email', 'location', 'welcome_text')
+    search_fields = ('phone', 'email', 'location')
+    list_filter = ('location',)
+    
+# Client Admin
+@admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ['full_name', 'quote']
+    list_display = ('full_name', 'quote')
+    search_fields = ('full_name',)
 
-# Custom admin class for Service model
+# Service Admin
+@admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ['service_title', 'service_brief_description', 'service_link']
+    list_display = ('service_title', 'icon', 'icon_color')
+    search_fields = ('service_title',)
+    list_filter = ('icon_color',)
 
-# Custom admin class for SkillRight model
+# SkillRight Admin
+@admin.register(SkillRight)
 class SkillRightAdmin(admin.ModelAdmin):
-    list_display = ['skill_title', 'skill_percent']
+    list_display = ('skill_title', 'skill_percent')
+    search_fields = ('skill_title',)
 
-# Custom admin class for SkillLeft model
+# SkillLeft Admin
+@admin.register(SkillLeft)
 class SkillLeftAdmin(admin.ModelAdmin):
-    list_display = ['skill_title', 'skill_percent']
+    list_display = ('skill_title', 'skill_percent')
+    search_fields = ('skill_title',)
 
-# Custom admin class for Summary model
+# Summary Admin
+@admin.register(Summary)
 class SummaryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'about_me', 'phone', 'email']
+    list_display = ('name', 'email', 'phone', 'about_me')
+    search_fields = ('name', 'email')
 
-# Custom admin class for Education model
+# Education Admin
+@admin.register(Education)
 class EducationAdmin(admin.ModelAdmin):
-    list_display = ['certificate', 'school', 'location', 'year_range']
-
-# Custom admin class for Experience model
-class ExperienceAdmin(admin.ModelAdmin):
-    list_display = ['experience', 'organisation', 'location', 'year_range']
-
-# Custom admin class for ContactUs model
-class ContactUsAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'subject', 'message']
-
-# Custom admin class for Facts model
-class FactsAdmin(admin.ModelAdmin):
-    list_display = ['happy_clients', 'project', 'hours_of_support', 'award_and_certifications']
-
-# Custom admin class for Portfolio model
-class PortfolioAdmin(admin.ModelAdmin):
-    list_display = ['category', 'url', 'image']
-
-# Register the custom admin classes
-admin.site.register(Feedback, FeedbackAdmin)
-admin.site.register(Webdata, WebdataAdmin)
-admin.site.register(Client, ClientAdmin)
-admin.site.register(Service, ServiceAdmin)
-admin.site.register(SkillRight, SkillRightAdmin)
-admin.site.register(SkillLeft, SkillLeftAdmin)
-admin.site.register(Summary, SummaryAdmin)
-admin.site.register(Education, EducationAdmin)
-admin.site.register(Experience, ExperienceAdmin)
-admin.site.register(ContactUs, ContactUsAdmin)
-admin.site.register(Facts, FactsAdmin)
-admin.site.register(Portfolio, PortfolioAdmin)
+    list_display = ('certificate', 'school', 'location', 'year_range')
+    search_fields = ('certificate', 'school')
+    list_filter = ('year_range',)
 
 
-
-
-AdminSite.index_title = 'Wisteen Admin'  # Replace with your desired index title
-AdminSite.site_title = 'Wisteen Dashboard'  # Replace with your desired site title
