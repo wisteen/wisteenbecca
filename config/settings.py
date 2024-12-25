@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-v6#2399_3(1vs_tcdg!1*f)y19tq7e&_=050aqdz$p^(b%o)^!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 CSRF_TRUSTED_ORIGINS = [
     'https://wisteenbecca.onrender.com',
@@ -41,8 +41,7 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "wisteenbecca.onrender.com","*", "127.0
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
-
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,6 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # create other apps
     'proposal',
+    'shareafric_app',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -175,3 +176,125 @@ CHANNEL_LAYERS = {
 
 WHATSAPP_URL="https://graph.facebook.com/v21.0/484038361468119/messages"
 WHATSAPP_TOKEN="Bearer EAARS1iKIw8MBOzayUZBOPeVZAKMHfdOeu2mXPCChLBkdXCje9uEfeZAdUjZAedOiHRbGSzfUY7870Od2UL32EXZAzSScuxXw2Lk6K2biZAiEdqi2FMzLWmy6bFoLKHWRZBmRCs98pqpZCP7i5nW0lZBetrtOSJMyuDo4Ym6UmVffNyZBbvVnlZBeotDZCKdTzDQZAgod8g8nArgZCYyn6LZACLfm5tgB1CWkC2wZBFnYg7rEw9ScXCsg"
+
+
+
+JAZZMIN_SETTINGS = {
+    # Title of the window
+    "site_title": "Rebecca Douglas Portfolio",
+
+    # Title on the login screen
+    "site_header": "Rebecca's Dashboard",
+
+    # Title on the brand
+    "site_brand": "Rebecca Douglas",
+
+    # Logo for the site
+    "site_logo": "assets/img/hero-bg.jpg",
+
+    # Welcome text on the login screen
+    "welcome_sign": "Welcome to Rebecca Douglas' Portfolio",
+
+    # Copyright on the footer
+    "copyright": "© 2024 Rebecca Douglas",
+
+    # List of model admins to search from the search bar
+    "search_model": ["portfolio.Project", "portfolio.Client"],
+
+    # User avatar field
+    "user_avatar": "assets/img/hero-bg.jpg",
+
+    ############
+    # Top Menu #
+    ############
+
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Portfolio", "url": "portfolio:project_list", "permissions": ["portfolio.view_project"]},
+        {"name": "Contact", "url": "https://rebeccadouglas.com/contact", "new_window": True},
+        {"model": "portfolio.Client"},
+    ],
+
+    #############
+    # User Menu #
+    #############
+
+    "usermenu_links": [
+        {"name": "My Profile", "url": "admin:auth_user_change", "new_window": False},
+        {"name": "Support", "url": "https://support.rebeccadouglas.com", "new_window": True},
+    ],
+
+    #############
+    # Side Menu #
+    #############
+
+    # Whether to display the side menu
+    "show_sidebar": True,
+
+    # Whether to auto-expand the menu
+    "navigation_expanded": True,
+
+    # Hide these apps when generating the side menu
+    "hide_apps": [],
+
+    # Custom links to append to app groups
+    "custom_links": {
+        "portfolio": [
+            {
+                "name": "Add Project",
+                "url": "admin:portfolio_project_add",
+                "icon": "fas fa-plus-circle",
+                "permissions": ["portfolio.add_project"]
+            },
+            {
+                "name": "View Reports",
+                "url": "portfolio:reports",
+                "icon": "fas fa-chart-line",
+                "permissions": ["portfolio.view_reports"]
+            },
+        ]
+    },
+
+    # Custom icons for side menu apps/models
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "portfolio.Project": "fas fa-folder-open",
+        "shareafric_app.Client": "fas fa-user-tie",
+        "shareafric_app.Client": "fas fa-user-tie",
+        "shareafric_app.Service": "fas fa-concierge-bell",  # Service
+        "shareafric_app.SkillRight": "fas fa-tasks",       # SkillRight
+        "shareafric_app.SkillLeft": "fas fa-tasks",        # SkillLeft
+        "shareafric_app.Summary": "fas fa-id-card",        # Summary
+        "shareafric_app.Education": "fas fa-graduation-cap", # Education
+        "shareafric_app.Experience": "fas fa-briefcase",   # Experience
+        "shareafric_app.ContactUs": "fas fa-envelope",     # ContactUs
+        "shareafric_app.Facts": "fas fa-chart-bar",        # Facts
+        "shareafric_app.Portfolio": "fas fa-th-large",     # Portfolio
+    },
+    # Default icons
+    "default_icon_parents": "fas fa-folder",
+    "default_icon_children": "fas fa-file",
+
+    #################
+    # Related Modal #
+    #################
+
+    "related_modal_active": True,
+
+    #############
+    # UI Tweaks #
+    #############
+
+    "custom_css": "portfolio/css/custom.css",
+    "custom_js": "portfolio/js/custom.js",
+    "use_google_fonts_cdn": True,
+    "show_ui_builder": False,
+
+    ###############
+    # Change view #
+    ###############
+
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {"portfolio.Project": "vertical_tabs"},
+    "language_chooser": True,
+}

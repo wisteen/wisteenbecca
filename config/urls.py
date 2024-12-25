@@ -1,25 +1,30 @@
-"""
-URL configuration for config project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path,include,re_path
+from django.views.generic import TemplateView
+from django.views.static import serve
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('proposal.urls')),
+    path('proposal/', include('proposal.urls')),
+    path('', include('shareafric_app.urls')),
 ]
 
 
+urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns= urlpatterns+ static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)
+handler404="shareafric_app.views.handle_error_page"
+
+# Add this line for the set_language functionality
+urlpatterns += [
+    path('set_language/', include('django.conf.urls.i18n')),
+]
+
+from django.conf.urls import handler400, handler403, handler404, handler500
+from shareafric_app.views import error_400_view, error_403_view, error_404_view, error_500_view, error_401_view
+
+handler400 = error_400_view
+handler403 = error_403_view
+handler404 = error_404_view
+handler500 = error_500_view
