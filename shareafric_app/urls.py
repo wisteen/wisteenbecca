@@ -10,6 +10,8 @@ urlpatterns = [
     # Add your URL patterns here
     path('', views.main, name='main'),
     path('contactUs', views.contactUs, name='contactUs'),
+    path('product/<int:product_id>/details/', views.get_product_details, name='get_product_details'),
+    
     # other paths...
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('sitemap.xml', TemplateView.as_view(template_name="sitemap.xml", content_type="application/xml")),

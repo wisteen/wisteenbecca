@@ -137,3 +137,141 @@ class Portfolio(models.Model):
     brief_description = RichTextField()
     image = models.FileField(upload_to='Portfolio')
     url = models.URLField(blank=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+from django.db import models
+from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from ckeditor.fields import RichTextField
+
+from django.utils import timezone
+from django.utils.text import slugify
+
+
+from django.db import models
+from django.contrib.auth import get_user_model
+from django.utils.text import slugify
+from django.utils import timezone
+from django.conf import settings
+import random
+import string
+
+
+def generate_unique_slug(instance, name):
+    slug = slugify(name)
+    model_class = instance.__class__
+    unique_slug = slug
+    counter = 1
+
+    while model_class.objects.filter(slug=unique_slug).exists():
+        unique_slug = f"{slug}-{counter}"
+        counter += 1
+
+    return unique_slug
+
+
+class Category(models.Model):
+    ICON_CHOICES = [
+        ('fa-laptop', 'Laptop'),
+        ('fa-mobile-alt', 'Mobile'),
+        ('fa-tshirt', 'T-shirt'),
+        ('fa-home', 'Home'),
+        ('fa-car', 'Car'),
+        ('fa-book', 'Book'),
+    ]
+
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True, blank=True)
+    description = models.TextField(blank=True, null=True)
+    icon = models.CharField(max_length=50, choices=ICON_CHOICES, default='fa-laptop')
+    image = models.ImageField(upload_to="category_images/", blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = generate_unique_slug(self, self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to="product_image/")
+    slug = models.SlugField(unique=True, blank=True)
+    category = models.ForeignKey(Category, related_name="products", on_delete=models.CASCADE)
+    description = RichTextField()
+    old_price = models.DecimalField(max_digits=10, decimal_places=2)
+    new_price = models.DecimalField(max_digits=10, decimal_places=2)
+    details = RichTextField(blank=True, null=True)
+    product_code = models.CharField(max_length=8, unique=True, editable=False, blank=True, null=True)
+    stock = models.IntegerField(default=10)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def discount(self):
+        if self.old_price and self.new_price:
+            return round((self.old_price - self.new_price) / self.old_price * 100, 2)
+        return None
+
+    @property
+    def is_available(self):
+        return self.stock > 0
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = generate_unique_slug(self, self.name)
+
+        if not self.product_code:
+            self.product_code = self.generate_product_code()
+
+
+        super().save(*args, **kwargs)
+
+    def generate_product_code(self):
+        prefix = 'IHM'
+        suffix = ''.join(random.choices(string.digits, k=5))
+        return f"{prefix}{suffix}"
+
+    def average_rating(self):
+        ratings = Rating.objects.filter(product=self)
+        if ratings.count() == 0:
+            return 0
+        cal = sum(rating.rating for rating in ratings) / ratings.count()
+        return round(cal, 1)
+
+    def __str__(self):
+        return self.name
+
+
+class Review(models.Model):
+    product = models.ForeignKey(Product, related_name="reviews", on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField()  # Rating out of 5
+    comment = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Review by {self.user.username} for {self.product.name}"
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, related_name="images", on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="product_images/")
+    alt_text = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return f"Image for {self.product.name}"

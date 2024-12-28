@@ -1,4 +1,5 @@
-from django.shortcuts import render
+import json
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -19,6 +20,13 @@ def main(request):
     client = Client.objects.all()
 
 
+
+    categories = Category.objects.all()
+    products = Product.objects.select_related('category').prefetch_related('images')[:10]  # limit to 10 products for example
+    # Fetch latest products with related images (prefetching for efficiency)
+    latest_products = Product.objects.prefetch_related('images').order_by('-created_at')[:10]  # Adjust number as needed
+    
+
     return render(request, 'MyResume/index.html',{
         'pages': page,
         'client': client,
@@ -31,8 +39,33 @@ def main(request):
         'portfolio': portfolio,
         'service': service,
         'client': client,
+
+        'categories': categories,
+        'products': products,
+        'latest_products': latest_products,
+
         })
 
+
+
+def get_product_details(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    product_images = ProductImage.objects.filter(product=product)
+    data = {
+        "id": product.id,
+        "name": product.name,
+        "category": product.category.name if product.category else "",
+        "new_price": product.new_price,
+        "old_price": product.old_price,
+        "discount": product.discount,
+        "product_main_img":product.image.url,
+        "image_urls": [img.image.url for img in product_images],  # Add more URLs if multiple images exist
+        "description": product.description,
+        "availability": "In Stock" if product.stock > 0 else "Out of Stock",
+    }
+    return JsonResponse(data)
+
+    
 def handle_error_page(request, exception):
     page = Webdata.objects.first()
     client = Client.objects.all()
