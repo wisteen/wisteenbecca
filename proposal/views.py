@@ -30,25 +30,26 @@ def WhatsAppWebhook(request):
         data = json.loads(request.body)
         logger.info(f"Incoming POST Data: {data}")
         print(data)
-        if 'object' in data and 'entry' in data:
-            try:
-                for entry in data['entry']:
-                    phoneNumber = entry['changes'][0]['value']['metadata']['display_phone_number']
-                    phoneId = entry['changes'][0]['value']['metadata']['phone_number_id']
-                    profileName = entry['changes'][0]['value']['contacts'][0]['profile']['name']
-                    whatsAppId = entry['changes'][0]['value']['contacts'][0]['wa_id']
-                    fromId = entry['changes'][0]['value']['messages'][0]['from']
-                    messageId = entry['changes'][0]['value']['messages'][0]['id']
-                    timestamp = entry['changes'][0]['value']['messages'][0]['timestamp']
-                    text = entry['changes'][0]['value']['messages'][0]['body']
-                    phoneNumber = "2349125442676"
-                    message = 'RE: {} was received from wisteenbecca'.format(text)
-                    logger.info(f"Processing message from {profileName}: {text}")
+        sendWhatsappMessage("2349125442676", data)
+        # if 'object' in data and 'entry' in data:
+        #     try:
+        #         for entry in data['entry']:
+        #             phoneNumber = entry['changes'][0]['value']['metadata']['display_phone_number']
+        #             phoneId = entry['changes'][0]['value']['metadata']['phone_number_id']
+        #             profileName = entry['changes'][0]['value']['contacts'][0]['profile']['name']
+        #             whatsAppId = entry['changes'][0]['value']['contacts'][0]['wa_id']
+        #             fromId = entry['changes'][0]['value']['messages'][0]['from']
+        #             messageId = entry['changes'][0]['value']['messages'][0]['id']
+        #             timestamp = entry['changes'][0]['value']['messages'][0]['timestamp']
+        #             text = entry['changes'][0]['value']['messages'][0]['body']
+        #             phoneNumber = "2349125442676"
+        #             message = 'RE: {} was received from wisteenbecca'.format(text)
+        #             logger.info(f"Processing message from {profileName}: {text}")
 
-                    sendWhatsappMessage(phoneNumber, message)
+        #             sendWhatsappMessage(phoneNumber, message)
 
-            except:
-                pass
+            # except:
+            #     pass
                 # logger.error(f"JSON decoding error: {e}")
                 # return HttpResponse('Invalid JSON', status=400)
 
